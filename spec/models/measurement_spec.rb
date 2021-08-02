@@ -5,6 +5,7 @@ require 'rails_helper'
 RSpec.describe Measurement, type: :model do
   # Association test
   # ensure an measurement record belongs to a single unit record
+  it { should belong_to(:user) }
   it { should belong_to(:unit) }
   # Validation test
   # ensure column name is present before saving

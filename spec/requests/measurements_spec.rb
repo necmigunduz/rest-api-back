@@ -3,8 +3,10 @@ require 'rails_helper'
 
 RSpec.describe 'Measurements API' do
   # Initialize the test data
+  let!(:user) { create(:user) }
   let!(:unit) { create(:unit) }
-  let!(:measurements) { create_list(:measurement, 20, unit_id: unit.id) }
+  let!(:measurements) { create_list(:measurement, 20, user_id: user.id, unit_id: unit.id) }
+  let(:user_id) { user.id }
   let(:unit_id) { unit.id }
   let(:id) { measurements.first.id }
 
@@ -64,8 +66,8 @@ RSpec.describe 'Measurements API' do
 
   # Test suite for PUT /units/:unit_id/measurements
   describe 'POST /units/:unit_id/measurements' do
-    let(:valid_attributes) { { value: 300 } }
-
+    let(:valid_attributes) { { value: 300, unit_id: unit_id, user_id: user_id } }
+  
     context 'when request attributes are valid' do
       before { post "/units/#{unit_id}/measurements", params: valid_attributes }
 
@@ -82,14 +84,14 @@ RSpec.describe 'Measurements API' do
       end
 
       it 'returns a failure message' do
-        expect(response.body).to match(/Validation failed: Value can't be blank/)
+        expect(response.body).to match(/Validation failed: User must exist, Value can't be blank/)
       end
     end
   end
 
   # Test suite for PUT /units/:unit_id/measurements/:id
   describe 'PUT /units/:unit_id/measurements/:id' do
-    let(:valid_attributes) { { value: 200 } }
+    let(:valid_attributes) { { value: 300 } }
 
     before { put "/units/#{unit_id}/measurements/#{id}", params: valid_attributes }
 
@@ -100,7 +102,7 @@ RSpec.describe 'Measurements API' do
 
       it 'updates the measurement' do
         updated_measurement = Measurement.find(id)
-        expect(updated_measurement.value).to match(/200/)
+        expect(updated_measurement.value).to match(/300/)
       end
     end
 
