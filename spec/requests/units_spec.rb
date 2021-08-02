@@ -3,13 +3,15 @@ require 'rails_helper'
 
 RSpec.describe 'units API', type: :request do
   # initialize test data
+  let(:user) { create(:user) }
   let!(:units) { create_list(:unit, 10) }
   let(:unit_id) { units.first.id }
+  let(:headers) { valid_headers }
 
   # Test suite for GET /units
   describe 'GET /units' do
     # make HTTP get request before each example
-    before { get '/units' }
+    before { get '/units', params: {}, headers: headers }
 
     it 'returns units' do
       # Note `json` is a custom helper to parse JSON responses
@@ -24,7 +26,7 @@ RSpec.describe 'units API', type: :request do
 
   # Test suite for GET /units/:id
   describe 'GET /units/:id' do
-    before { get "/units/#{unit_id}" }
+    before { get "/units/#{unit_id}", params: {}, headers: headers }
 
     context 'when the record exists' do
       it 'returns the unit' do
@@ -53,10 +55,12 @@ RSpec.describe 'units API', type: :request do
   # Test suite for POST /units
   describe 'POST /units' do
     # valid payload
-    let(:valid_attributes) { { title: 'Learn Elm' } }
+    let(:valid_attributes) do
+      { title: 'Learn Elm' }.to_json
+    end
 
     context 'when the request is valid' do
-      before { post '/units', params: valid_attributes }
+      before { post '/units', params: valid_attributes, headers: headers }
 
       it 'creates a unit' do
         expect(json['title']).to eq('Learn Elm')
@@ -68,14 +72,15 @@ RSpec.describe 'units API', type: :request do
     end
 
     context 'when the request is invalid' do
-      before { post '/units', params: { title: '' } }
+      let(:invalid_attributes) { { title: nil }.to_json }
+      before { post '/units', params: invalid_attributes, headers: headers }
 
       it 'returns status code 422' do
         expect(response).to have_http_status(422)
       end
 
       it 'returns a validation failure message' do
-        expect(response.body)
+        expect(json['message'])
           .to match(/Validation failed: Title can't be blank/)
       end
     end
@@ -83,10 +88,10 @@ RSpec.describe 'units API', type: :request do
 
   # Test suite for PUT /units/:id
   describe 'PUT /units/:id' do
-    let(:valid_attributes) { { title: 'Shopping' } }
+    let(:valid_attributes) { { title: 'Shopping' }.to_json }
 
     context 'when the record exists' do
-      before { put "/units/#{unit_id}", params: valid_attributes }
+      before { put "/units/#{unit_id}", params: valid_attributes, headers: headers }
 
       it 'updates the record' do
         expect(response.body).to be_empty
@@ -100,7 +105,7 @@ RSpec.describe 'units API', type: :request do
 
   # Test suite for DELETE /units/:id
   describe 'DELETE /units/:id' do
-    before { delete "/units/#{unit_id}" }
+    before { delete "/units/#{unit_id}", params: {}, headers: headers }
 
     it 'returns status code 204' do
       expect(response).to have_http_status(204)
