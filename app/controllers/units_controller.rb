@@ -4,7 +4,7 @@ class UnitsController < ApplicationController
   
     # GET /units
     def index
-      @units = Unit.all
+      @units = current_user.measurements
       json_response(@units)
     end
   
@@ -34,7 +34,6 @@ class UnitsController < ApplicationController
     private
   
     def unit_params
-      # whitelist params
       params.permit(:title)
     end
   

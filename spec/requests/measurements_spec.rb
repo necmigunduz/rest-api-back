@@ -9,10 +9,11 @@ RSpec.describe 'Measurements API' do
   let(:user_id) { user.id }
   let(:unit_id) { unit.id }
   let(:id) { measurements.first.id }
+  let(:headers) { valid_headers }
 
   # Test suite for GET /units/:unit_id/measurements
   describe 'GET /units/:unit_id/measurements' do
-    before { get "/units/#{unit_id}/measurements" }
+    before { get "/units/#{unit_id}/measurements", params: {}, headers: headers }
 
     context 'when unit exists' do
       it 'returns status code 200' do
@@ -39,7 +40,7 @@ RSpec.describe 'Measurements API' do
 
   # Test suite for GET /units/:unit_id/measurements/:id
   describe 'GET /units/:unit_id/measurements/:id' do
-    before { get "/units/#{unit_id}/measurements/#{id}" }
+    before { get "/units/#{unit_id}/measurements/#{id}", params: {}, headers: headers }
 
     context 'when unit measurement exists' do
       it 'returns status code 200' do
@@ -66,10 +67,12 @@ RSpec.describe 'Measurements API' do
 
   # Test suite for PUT /units/:unit_id/measurements
   describe 'POST /units/:unit_id/measurements' do
-    let(:valid_attributes) { { value: 300, unit_id: unit_id, user_id: user_id } }
+    let(:valid_attributes) { { value: 300, unit_id: unit_id, user_id: user_id }.to_json }
   
     context 'when request attributes are valid' do
-      before { post "/units/#{unit_id}/measurements", params: valid_attributes }
+      before do 
+        post "/units/#{unit_id}/measurements", params: valid_attributes, headers: headers
+      end
 
       it 'returns status code 200' do
         expect(response).to have_http_status(200)
@@ -77,7 +80,7 @@ RSpec.describe 'Measurements API' do
     end
 
     context 'when an invalid request' do
-      before { post "/units/#{unit_id}/measurements", params: {} }
+      before { post "/units/#{unit_id}/measurements", params: {}, headers: headers }
 
       it 'returns status code 422' do
         expect(response).to have_http_status(422)
@@ -91,9 +94,11 @@ RSpec.describe 'Measurements API' do
 
   # Test suite for PUT /units/:unit_id/measurements/:id
   describe 'PUT /units/:unit_id/measurements/:id' do
-    let(:valid_attributes) { { value: 300 } }
+    let(:valid_attributes) { { value: 300 }.to_json }
 
-    before { put "/units/#{unit_id}/measurements/#{id}", params: valid_attributes }
+    before do 
+      put "/units/#{unit_id}/measurements/#{id}", params: valid_attributes, headers: headers
+    end
 
     context 'when measurement exists' do
       it 'returns status code 204' do
@@ -121,7 +126,7 @@ RSpec.describe 'Measurements API' do
 
   # Test suite for DELETE /units/:id
   describe 'DELETE /units/:id' do
-    before { delete "/units/#{unit_id}/measurements/#{id}" }
+    before { delete "/units/#{unit_id}/measurements/#{id}", params: {}, headers: headers }
 
     it 'returns status code 204' do
       expect(response).to have_http_status(204)

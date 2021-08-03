@@ -15,8 +15,8 @@ class MeasurementsController < ApplicationController
   
     # POST /units/:unit_id/measurements
     def create
-      @unit.measurements.create!(measurement_params)
-      json_response(@unit)
+      @measurement = @unit.measurements.create!(measurement_params)
+      json_response(@measurement)
     end
   
     # PUT /units/:unit_id/measurements/:id
