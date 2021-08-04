@@ -4,7 +4,7 @@ class UnitsController < ApplicationController
   
     # GET /units
     def index
-      @units = current_user.measurements
+      @units = Unit.all
       json_response(@units)
     end
   
