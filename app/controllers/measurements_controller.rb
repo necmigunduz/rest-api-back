@@ -1,6 +1,6 @@
 # app/controllers/measurements_controller.rb
 class MeasurementsController < ApplicationController
-    before_action :set_unit
+    before_action :set_unit, except: [:index]
     before_action :set_unit_measurement, only: [:show, :update, :destroy]
   
     # GET /units/:unit_id/measurements
