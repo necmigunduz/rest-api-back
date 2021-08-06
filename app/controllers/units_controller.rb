@@ -5,7 +5,7 @@ class UnitsController < ApplicationController
   # GET /units
   def index
     @units = Unit.all
-    json_response(@units)
+    render json: { units: @units, status: :ok }
   end
 
   # POST /units
@@ -16,7 +16,10 @@ class UnitsController < ApplicationController
 
   # GET /units/:id
   def show
-    json_response(@unit)
+    @unit = Unit.find(params[:id])
+    @user = current_user
+    @measurements = @unit.measurements.where(user_id: @user.id)
+    render json: { unit: @unit, measurements: @measurements }, status: :ok
   end
 
   # PUT /units/:id

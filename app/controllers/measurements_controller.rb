@@ -5,20 +5,34 @@ class MeasurementsController < ApplicationController
   
     # GET /units/:unit_id/measurements
     def index
-      json_response(@unit.measurements)
+      @measurements = current_user.measurements.with_units.order(created_at: :desc)
+      data = Hash.new { |h, k| h[k] = [] }
+      @measurements.each do |m|
+        data[m.unit.title] << m
+      end
+      render json: { data: data, status: :ok }
     end
   
     # GET /units/:unit_id/measurements/:id
-    def show
-      json_response(@measurement)
-    end
+    # def show
+    #   json_response(@measurement)
+    # end
   
     # POST /units/:unit_id/measurements
+    # def create
+    #   @measurement = @unit.measurements.create!(measurement_params)
+    #   json_response(@measurement)
+    # end
+    
     def create
-      @measurement = @unit.measurements.create!(measurement_params)
-      json_response(@measurement)
+      @measurement = current_user.measurements.build(measurement_params)
+      @measurement.unit_id = params[:unit_id]
+      if @measurement.save
+        render json: { measurement: @measurement }
+      else
+        render json: { error: 'Invalid submission' }
+      end
     end
-  
     # PUT /units/:unit_id/measurements/:id
     def update
       @measurement.update(measurement_params)
