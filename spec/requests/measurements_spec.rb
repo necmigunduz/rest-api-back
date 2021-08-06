@@ -5,7 +5,7 @@ RSpec.describe 'Measurements API' do
   # Initialize the test data
   let!(:user) { create(:user) }
   let!(:unit) { create(:unit) }
-  let!(:measurements) { create_list(:measurement, 20, user_id: user.id, unit_id: unit.id) }
+  let!(:measurements) { create_list(:measurement, 2, user_id: user.id, unit_id: unit.id) }
   let(:user_id) { user.id }
   let(:unit_id) { unit.id }
   let(:id) { measurements.first.id }
@@ -13,7 +13,7 @@ RSpec.describe 'Measurements API' do
 
   # Test suite for GET /units/:unit_id/measurements
   describe 'GET /units/:unit_id/measurements' do
-    before { get "/units/#{unit_id}/measurements", params: {}, headers: headers }
+    before { get "/measurements", params: {}, headers: headers }
 
     context 'when unit exists' do
       it 'returns status code 200' do
@@ -21,46 +21,7 @@ RSpec.describe 'Measurements API' do
       end
 
       it 'returns all unit measurements' do
-        expect(json.size).to eq(20)
-      end
-    end
-
-    context 'when unit does not exist' do
-      let(:unit_id) { 0 }
-
-      it 'returns status code 404' do
-        expect(response).to have_http_status(404)
-      end
-
-      it 'returns a not found message' do
-        expect(response.body).to match(/Couldn't find Unit/)
-      end
-    end
-  end
-
-  # Test suite for GET /units/:unit_id/measurements/:id
-  describe 'GET /units/:unit_id/measurements/:id' do
-    before { get "/units/#{unit_id}/measurements/#{id}", params: {}, headers: headers }
-
-    context 'when unit measurement exists' do
-      it 'returns status code 200' do
-        expect(response).to have_http_status(200)
-      end
-
-      it 'returns the measurement' do
-        expect(json['id']).to eq(id)
-      end
-    end
-
-    context 'when unit measurement does not exist' do
-      let(:id) { 0 }
-
-      it 'returns status code 404' do
-        expect(response).to have_http_status(404)
-      end
-
-      it 'returns a not found message' do
-        expect(response.body).to match(/Couldn't find Measurement/)
+        expect(json.size).to eq(2)
       end
     end
   end
@@ -82,12 +43,8 @@ RSpec.describe 'Measurements API' do
     context 'when an invalid request' do
       before { post "/units/#{unit_id}/measurements", params: {}, headers: headers }
 
-      it 'returns status code 422' do
-        expect(response).to have_http_status(422)
-      end
-
       it 'returns a failure message' do
-        expect(response.body).to match(/Validation failed: User must exist, Value can't be blank/)
+        expect(response.body).to match(/Invalid submission/)
       end
     end
   end
