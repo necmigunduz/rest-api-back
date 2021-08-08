@@ -13,7 +13,7 @@ RSpec.describe 'Measurements API' do
 
   # Test suite for GET /units/:unit_id/measurements
   describe 'GET /units/:unit_id/measurements' do
-    before { get "/measurements", params: {}, headers: headers }
+    before { get '/measurements', params: {}, headers: headers }
 
     context 'when unit exists' do
       it 'returns status code 200' do
@@ -29,9 +29,9 @@ RSpec.describe 'Measurements API' do
   # Test suite for PUT /units/:unit_id/measurements
   describe 'POST /units/:unit_id/measurements' do
     let(:valid_attributes) { { value: 300, unit_id: unit_id, user_id: user_id }.to_json }
-  
+
     context 'when request attributes are valid' do
-      before do 
+      before do
         post "/units/#{unit_id}/measurements", params: valid_attributes, headers: headers
       end
 
@@ -53,7 +53,7 @@ RSpec.describe 'Measurements API' do
   describe 'PUT /units/:unit_id/measurements/:id' do
     let(:valid_attributes) { { value: 300 }.to_json }
 
-    before do 
+    before do
       put "/units/#{unit_id}/measurements/#{id}", params: valid_attributes, headers: headers
     end
 

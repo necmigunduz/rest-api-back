@@ -12,11 +12,11 @@ RSpec.describe 'units API', type: :request do
   # Test suite for GET /units
   describe 'GET /units' do
     # make HTTP get request before each example
-    before do 
+    before do
       measurements
       get '/units', params: {}, headers: headers
     end
-    
+
     it 'returns units' do
       # Note `json` is a custom helper to parse JSON responses
       expect(json).not_to be_empty
@@ -32,7 +32,6 @@ RSpec.describe 'units API', type: :request do
     before { get "/units/#{unit_id}", params: {}, headers: headers }
 
     context 'when the record exists' do
-
       it 'returns status code 200' do
         expect(response).to have_http_status(200)
       end
