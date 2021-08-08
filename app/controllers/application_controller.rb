@@ -1,3 +1,4 @@
+# rubocop:disable Style/RedundantParentheses
 # app/controllers/application_controller.rb
 class ApplicationController < ActionController::API
   include Response
@@ -14,3 +15,5 @@ class ApplicationController < ActionController::API
     @current_user = (AuthorizeApiRequest.new(request.headers).call)[:user]
   end
 end
+
+# rubocop:enable Style/RedundantParentheses
