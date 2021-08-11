@@ -5,7 +5,7 @@ class MeasurementsController < ApplicationController
 
   # GET /units/:unit_id/measurements
   def index
-    @measurements = current_user.measurements.with_units.order(created_at: :desc)
+    @measurements = current_user.measurements.with_units
     data = Hash.new { |h, k| h[k] = [] }
     @measurements.each do |m|
       data[m.unit.title] << m
