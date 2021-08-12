@@ -1,5 +1,6 @@
 # app/controllers/units_controller.rb
 class UnitsController < ApplicationController
+  skip_before_action :authorize_request, only: :index
   before_action :set_unit, only: [:show]
 
   # GET /units
