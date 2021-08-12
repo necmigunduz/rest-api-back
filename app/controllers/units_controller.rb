@@ -17,6 +17,9 @@ class UnitsController < ApplicationController
 
   # GET /units/:id
   def show
+    @unit = Unit.find(params[:id])
+    # @user = current_user
+    @measurements = @unit.measurements.with_user(current_user.id)
     render json: { unit: @unit, measurements: @measurements }, status: :ok
   end
 

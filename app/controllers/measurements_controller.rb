@@ -3,12 +3,15 @@ class MeasurementsController < ApplicationController
   before_action :set_unit, except: %i[index show]
   before_action :set_unit_measurement, only: %i[show update destroy]
 
-  # GET /units/:unit_id/measurements
+  # GET /measurements
   def index
-    @measurements = Measurement.all
+    @measurements = current_user.measurements.with_units
+    # data = Hash.new { |h, k| h[k] = [] }
+    # @measurements.each do |m|
+    #   data[m.unit.title] << m
+    # end
     render json: { data: @measurements, status: :ok }
   end
-
   # GET /units/:unit_id/measurements/:id
   # def show
   #   json_response(@measurement)
@@ -22,7 +25,7 @@ class MeasurementsController < ApplicationController
 
   def create
     @measurement = current_user.measurements.build(measurement_params)
-    @measurement.unit_id = params[:unit_id]
+    # @measurement.unit_id = params[:unit_id]
     if @measurement.save
       render json: { measurement: @measurement }
     else
@@ -45,7 +48,7 @@ class MeasurementsController < ApplicationController
   private
 
   def measurement_params
-    params.permit(:value, :unit_id, :user_id)
+    params.permit(:value, :unit_id)
   end
 
   def set_unit

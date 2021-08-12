@@ -1,7 +1,8 @@
 class Unit < ApplicationRecord
   has_many :measurements
 
-  scope :with_measurements, -> (user_id) { includes(:measurements).where(user_id: user_id) }
+  
+  # scope :costs_more_than, ->(amount) { where("price > ?", amount) }
 
   validates :title, presence: true
 end
