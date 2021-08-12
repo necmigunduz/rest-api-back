@@ -1,16 +1,12 @@
 # app/controllers/measurements_controller.rb
 class MeasurementsController < ApplicationController
-  before_action :set_unit, except: [:index]
+  before_action :set_unit, except: %i[index show]
   before_action :set_unit_measurement, only: %i[show update destroy]
 
   # GET /units/:unit_id/measurements
   def index
-    @measurements = current_user.measurements.with_units
-    data = Hash.new { |h, k| h[k] = [] }
-    @measurements.each do |m|
-      data[m.unit.title] << m
-    end
-    render json: { data: data, status: :ok }
+    @measurements = Measurement.all
+    render json: { data: @measurements, status: :ok }
   end
 
   # GET /units/:unit_id/measurements/:id
