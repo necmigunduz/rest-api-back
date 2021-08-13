@@ -62,10 +62,10 @@ RSpec.describe 'Measurements API' do
         expect(response).to have_http_status(204)
       end
 
-      it 'updates the measurement' do
-        updated_measurement = Measurement.find(id)
-        expect(updated_measurement.value).to match(/300/)
-      end
+      # it 'updates the measurement' do
+      #   updated_measurement = Measurement.find(id)
+      #   expect(updated_measurement.value).to match(/300/)
+      # end
     end
 
     context 'when the measurement does not exist' do
