@@ -6,11 +6,11 @@ class MeasurementsController < ApplicationController
   # GET /measurements
   def index
     @measurements = current_user.measurements.with_units
-    # data = Hash.new { |h, k| h[k] = [] }
-    # @measurements.each do |m|
-    #   data[m.unit.title] << m
-    # end
-    render json: { data: @measurements, status: :ok }
+    data = Hash.new { |h, k| h[k] = [] }
+    @measurements.each do |m|
+      data[m.unit.title] << m
+    end
+    render json: { data: data, status: :ok }
   end
   # GET /units/:unit_id/measurements/:id
   # def show
