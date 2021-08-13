@@ -1,6 +1,6 @@
 # config/routes.rb
 Rails.application.routes.draw do
-  post 'auth/login', to: 'authentication#authenticate'
+  resources :authentication, only: [:create]
   resources :users, only: [:create]
   resources :units do
     resources :measurements, only: [:create, :update, :destroy]
