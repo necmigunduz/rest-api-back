@@ -2,7 +2,7 @@
 
 # BodyMonitor Api
 
-This api is the backend of the BodyMonitor app. The link for the deployed version is [here](https://rest-api-front.herokuapp.com/).
+This api is the backend of the BodyMonitor app. The link for the deployed version is [here](https://rest-api-front.herokuapp.com/)
 
 - POST /users 
 Arguments:
