@@ -20,7 +20,7 @@ class MeasurementsController < ApplicationController
     if @measurement.save
       render json: { measurement: @measurement }
     else
-      render json: {error: 'Invalid submission'}
+      render json: { error: 'Invalid submission' }
     end
   end
 
@@ -35,6 +35,7 @@ class MeasurementsController < ApplicationController
   end
 
   private
+
   def measurement_params
     params.permit(:value, :unit_id, :user_id)
   end
