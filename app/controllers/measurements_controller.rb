@@ -24,7 +24,7 @@ class MeasurementsController < ApplicationController
     end
   end
 
-  def updated
+  def update
     @measurement.update(measurement_params)
     head :no_content
   end
